@@ -23,7 +23,6 @@
                         'primary-dark': '#1a56db',
                         surface: '#f8fafc',
                         dark: '#1e293b',
-                        'glass-bg': 'rgba(255, 255, 255, 0.7)',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -56,38 +55,25 @@
     <style>
         :root {
             --primary: #2e70ff;
-            --primary-glow: rgba(46, 112, 255, 0.4);
             --glass: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.3);
         }
 
-        /* Animated Mesh Gradient Background */
         .mesh-gradient {
             background: linear-gradient(-45deg, #f8fafc, #e2e8f0, #dbeafe, #eff6ff);
             background-size: 400% 400%;
             animation: mesh 15s ease infinite;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
         }
 
-        /* Noise Texture Overlay */
         .noise-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.03;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            opacity: 0.03; pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Glassmorphism */
         .glass {
             background: var(--glass);
             backdrop-filter: blur(12px);
@@ -95,49 +81,28 @@
             border: 1px solid var(--glass-border);
         }
 
-        /* Liquid Fill Button Animation */
         .btn-liquid {
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden; z-index: 1;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1;
         }
         .btn-liquid::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
+            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2); z-index: -1;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: -1;
         }
-        .btn-liquid:hover::after {
-            top: 0;
-        }
+        .btn-liquid:hover::after { top: 0; }
 
-        /* Intersection Observer Reveal Class */
         .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
+            opacity: 0; transform: translateY(30px) scale(0.95);
             transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .reveal-on-scroll.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+        .reveal-on-scroll.active { opacity: 1; transform: translateY(0) scale(1); }
 
-        /* Staggered Delay Utilities */
         .delay-100 { transition-delay: 100ms; }
         .delay-200 { transition-delay: 200ms; }
         .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
-        .delay-500 { transition-delay: 500ms; }
 
-        .mockup-shadow {
-            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1));
-        }
+        .mockup-shadow { filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1)); }
     </style>
 </head>
 <body class="bg-surface text-dark selection:bg-primary/20">
@@ -146,303 +111,234 @@
     <div class="noise-overlay" aria-hidden="true"></div>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full z-50 glass" role="navigation" aria-label="Navegación principal">
+    <nav class="fixed top-0 left-0 w-full z-50 glass" role="navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex items-center space-x-2">
                     <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">h</div>
-                    <span class="text-2xl font-extrabold tracking-tight text-dark">HGI</span>
+                    <span class="text-2xl font-black text-dark tracking-tighter">HGI</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+                <div class="hidden md:flex items-center space-x-8 text-sm font-bold text-slate-700 uppercase tracking-wider">
+                    <a href="#plataforma" class="hover:text-primary transition-colors">Plataforma</a>
                     <a href="#modulos" class="hover:text-primary transition-colors">Módulos</a>
-                    <a href="#beneficios" class="hover:text-primary transition-colors">Beneficios</a>
-                    <a href="#nosotros" class="hover:text-primary transition-colors">Nosotros</a>
-                    <a href="#contacto" class="hover:text-primary transition-colors">Contacto</a>
-                    <button class="bg-primary text-white px-6 py-2.5 rounded-full btn-liquid btn-magnetic font-bold" aria-label="Comenzar prueba gratuita">Prueba Gratis</button>
-                    <a href="#" class="text-primary hover:text-primary-dark font-bold">Iniciar Sesión</a>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button class="text-dark p-2" id="mobile-menu-btn" aria-expanded="false" aria-label="Abrir menú">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
+                    <a href="#control" class="hover:text-primary transition-colors">Gestión</a>
+                    <a href="#implementacion" class="hover:text-primary transition-colors">Implementación</a>
+                    <a href="#empresa" class="hover:text-primary transition-colors">Empresa</a>
+                    <button class="bg-primary text-white px-6 py-2.5 rounded-full btn-liquid btn-magnetic font-bold shadow-lg shadow-primary/20">Solicitar Demo</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative pt-40 pb-20 overflow-hidden">
+    <!-- Hero -->
+    <header class="relative pt-48 pb-20 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="reveal-on-scroll">
-                    <span class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold text-primary bg-primary/10 rounded-full">GESTIÓN INTEGRAL DE CONSTRUCCIONES</span>
-                    <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
-                        HGI - Plataforma de <span class="text-primary">Gestión Integral</span> para Constructoras
+                    <span class="inline-block px-4 py-1 mb-6 text-xs font-black text-primary bg-primary/10 rounded-full uppercase tracking-widest">HGI Ecosistema Digital</span>
+                    <h1 class="text-6xl lg:text-8xl font-black leading-none mb-8">
+                        Control <span class="text-primary">Absoluto</span>
                     </h1>
-                    <p class="text-xl text-slate-600 mb-10 leading-relaxed max-w-lg">
-                        Control real de presupuestos, contratos, órdenes de compra, subcontratos, estados de pago y finanzas en una sola plataforma robusta y escalable.
+                    <p class="text-xl text-slate-600 mb-12 leading-relaxed max-w-lg">
+                        La plataforma de gestión integral diseñada para la realidad de las constructoras modernas. Integración técnica y financiera sin fisuras.
                     </p>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button class="bg-primary text-white px-8 py-4 rounded-xl btn-liquid btn-magnetic font-bold text-lg shadow-lg shadow-primary/20">Ver Módulos</button>
-                        <button class="border-2 border-slate-200 bg-white/50 text-dark px-8 py-4 rounded-xl btn-magnetic font-bold text-lg hover:bg-white transition-all">Solicitar Demo</button>
+                        <button class="bg-primary text-white px-10 py-5 rounded-2xl btn-liquid btn-magnetic font-black text-lg shadow-2xl shadow-primary/30">Agendar Demo</button>
+                        <button class="border-2 border-slate-200 glass text-dark px-10 py-5 rounded-2xl btn-magnetic font-black text-lg">Explorar Módulos</button>
                     </div>
                 </div>
-                <div class="relative reveal-on-scroll delay-200">
+                <div class="reveal-on-scroll delay-200">
                     <div class="animate-float">
-                        <img src="https://lh3.googleusercontent.com/aida/AOfcidUOpSCGqPbPY9eZvnQhVIpBQz-5APprVfTnDmMPDYWR5IfC2beMNnv-cc9RVW3YL8GLpVpeY1avP-8l60Q-yuYsBg2p7SWl6ZKhojvDvvil0XfbtmDsG_GCc3U-pXyLUG2BA7uA6OVsODv99DVCobXl-0lYfCG1B6QjHKLIsS-EjEZGq1q4h_Jf7jZFzcA3qwR9Azq8LMTeA8dLfIvsjCp9qyO27pnG5fUCNohVlg603EKUtXQtZ21l5q2x" alt="HGI Dashboard Principal" class="mockup-shadow rounded-2xl border border-white/40">
+                        <img src="https://lh3.googleusercontent.com/aida/AOfcidUOpSCGqPbPY9eZvnQhVIpBQz-5APprVfTnDmMPDYWR5IfC2beMNnv-cc9RVW3YL8GLpVpeY1avP-8l60Q-yuYsBg2p7SWl6ZKhojvDvvil0XfbtmDsG_GCc3U-pXyLUG2BA7uA6OVsODv99DVCobXl-0lYfCG1B6QjHKLIsS-EjEZGq1q4h_Jf7jZFzcA3qwR9Azq8LMTeA8dLfIvsjCp9qyO27pnG5fUCNohVlg603EKUtXQtZ21l5q2x" alt="Dashboard HGI" class="mockup-shadow rounded-[2.5rem] border-4 border-white/50">
                     </div>
-                    <!-- Decorative Elements -->
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 blur-3xl rounded-full" aria-hidden="true"></div>
-                    <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-blue-400/10 blur-3xl rounded-full" aria-hidden="true"></div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Stats Section -->
-    <section class="py-20 bg-slate-900 text-white overflow-hidden">
+    <!-- Plataforma Section -->
+    <section id="plataforma" class="py-32 bg-white/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal-on-scroll">
-                <h2 class="text-3xl font-bold mb-4">¿Qué es HGI?</h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-lg">
-                    HGI es una plataforma robusta y amigable, utilizada por muchos años en <strong>entornos reales de construcción</strong>, diseñada para integrar el control técnico, comercial y financiero en un solo sistema adaptado a la realidad chilena. No es solo un software; es el resultado de décadas de experiencia en obra.
-                </p>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center reveal-on-scroll delay-100">
-                    <div class="text-4xl font-extrabold text-primary mb-2">15+</div>
-                    <div class="text-sm text-slate-400 uppercase tracking-widest">Años de experiencia</div>
-                </div>
-                <div class="text-center reveal-on-scroll delay-200">
-                    <div class="text-4xl font-extrabold text-primary mb-2">100%</div>
-                    <div class="text-sm text-slate-400 uppercase tracking-widest">Web y Escalable</div>
-                </div>
-                <div class="text-center reveal-on-scroll delay-300">
-                    <div class="text-4xl font-extrabold text-primary mb-2">360°</div>
-                    <div class="text-sm text-slate-400 uppercase tracking-widest">Control Técnico y Financiero</div>
-                </div>
-                <div class="text-center reveal-on-scroll delay-400">
-                    <div class="text-4xl font-extrabold text-primary mb-2">24/7</div>
-                    <div class="text-sm text-slate-400 uppercase tracking-widest">Acceso desde cualquier lugar</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modules Grid -->
-    <section id="modulos" class="py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20 reveal-on-scroll">
-                <h2 class="text-4xl font-extrabold mb-4">Nuestros Módulos Especializados</h2>
-                <p class="text-slate-600 max-w-2xl mx-auto">Herramientas diseñadas específicamente para cada área crítica de su constructora, integradas en un ecosistema de datos único.</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Module Card 1 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Presupuestos</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Control total de costos directos e indirectos por partida.</p>
-                </article>
-                <!-- Card 2 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Órdenes de Compra</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Gestión de suministros con flujo de aprobación rápidos.</p>
-                </article>
-                <!-- Card 3 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
-                    <div class="w-12 h-12 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Documentos de Compra</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Facturación de servicios, guías y respaldos contractuales.</p>
-                </article>
-                <!-- Card 4 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-400 group">
-                    <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Lista de Proveedores</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Base de datos unificada y evaluación de desempeño.</p>
-                </article>
-                <!-- Card 5 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
-                    <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Pagos</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Programación y ejecución financiera de compromisos.</p>
-                </article>
-                <!-- Card 6 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
-                    <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Subcontratos y EPP</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Control de estados de pago y retenciones de terceros.</p>
-                </article>
-                <!-- Card 7 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Bodega</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Control de inventario, consumos y mermas por proyecto.</p>
-                </article>
-                <!-- Card 8 -->
-                <article class="glass p-8 rounded-3xl hover:shadow-2xl transition-all reveal-on-scroll delay-400 group">
-                    <div class="w-12 h-12 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-600 mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Ventas y Cobranzas</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Seguimiento de flujo de caja y estados presupuestarios.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section id="beneficios" class="py-32 bg-slate-900/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="order-2 lg:order-1 reveal-on-scroll">
-                    <div class="relative">
-                        <img src="https://lh3.googleusercontent.com/aida/AOfcidUsqvfimPpIvyaLMp8ot2TAIksmL1Jw8aPSI6IYc_RXI9wYH85_RrlJ1LAoJ4URTKDBU1-vxuHIeugWDZB0ZiEAiOPkj8C14MdV4qc38R0R-6_gRywWvIhDM-vExdIi4G_IQ_MaQVMovyrO_KcJjo_aX_tSW4GH4kWBYnqxYnmxOSf_crmVJpnGJ5XgNHGXg2fcQCSVIlr7KWSxk930tn2PawD5SMTMffqFkODlSNdlkNpkp4AfxcTf3lw" alt="Dashboard de Análisis de HGI" class="mockup-shadow rounded-3xl border border-white">
-                        <!-- Floating badge -->
-                        <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl shadow-xl max-w-[200px]" aria-live="polite">
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Rendimiento</p>
-                            <p class="text-2xl font-black text-primary">+24.5%</p>
-                            <p class="text-[10px] text-slate-500 mt-1">Aumento en eficiencia de gestión de pagos.</p>
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="reveal-on-scroll">
+                    <h2 class="text-4xl lg:text-5xl font-black mb-8 leading-tight">Plataforma HGI</h2>
+                    <p class="text-lg text-slate-600 mb-10">Un núcleo centralizado que conecta cada departamento de su constructora. Información veraz, en tiempo real, accesible desde cualquier lugar.</p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass p-6 rounded-3xl">
+                            <div class="text-3xl font-black text-primary mb-2">100%</div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Nativo en la Nube</p>
+                        </div>
+                        <div class="glass p-6 rounded-3xl">
+                            <div class="text-3xl font-black text-primary mb-2">360°</div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Visión de Obra</p>
                         </div>
                     </div>
                 </div>
-                <div class="order-1 lg:order-2 reveal-on-scroll delay-200">
-                    <span class="text-primary font-bold uppercase tracking-widest text-sm">Altos Estándares</span>
-                    <h2 class="text-4xl lg:text-5xl font-extrabold mt-4 mb-8 leading-tight">Diseñado para Medianas y Grandes Constructoras</h2>
-                    <p class="text-lg text-slate-600 mb-10 leading-relaxed">Nuestra solución está optimizada para empresas que requieren una trazabilidad técnica-financiera total, eliminando las brechas de información entre la oficina central y el terreno.</p>
-
-                    <ul class="space-y-6">
-                        <li class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center mt-1">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg text-dark">Control presupuestario por partida</h4>
-                                <p class="text-slate-500">Trazabilidad granular de cada peso invertido en el proyecto.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center mt-1">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg text-dark">Integración total de documentos</h4>
-                                <p class="text-slate-500">Conexión automática entre contratos, ordenes de compra y facturas.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-4">
-                            <div class="flex-shrink-0 w-6 h-6 bg-primary/20 text-primary rounded-full flex items-center justify-center mt-1">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-lg text-dark">Reportería en tiempo real</h4>
-                                <p class="text-slate-500">Dashboards inteligentes para toma de decisiones estratégicas inmediatas.</p>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="reveal-on-scroll delay-200">
+                    <img src="https://lh3.googleusercontent.com/aida/AOfcidUHpnJZs_wyczhs0_HEMMgZo14hBO3jqJ7QPsvwMmItAFFslZ_nJ9j4uhRQL6nWWLH0ybuuZtN6j8VNd9QdG361b_Gxj8TZ-2iR0HcHi95JP15nLoPacd8etibIS6Mdjmkk0_gDSTna1leSBAF1cwAfBTTcQvyKxd9BBMvUNftS0gVgqfoh_AxgUuFtT0dkdc3pRWo6P5Idvi-xmD3-N9toIWBAm0jCkhWD0Wl9HBkCTYETFBssYBSmk70W" alt="HGI UI" class="rounded-3xl shadow-2xl border-2 border-white">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-32">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-primary rounded-[3rem] p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-primary/30 reveal-on-scroll">
-                <div class="relative z-10">
-                    <h2 class="text-4xl lg:text-6xl font-extrabold mb-8 leading-tight">¿Listo para tomar el control total?</h2>
-                    <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto">Únase a las constructoras que ya están liderando el mercado con eficiencia técnica y financiera.</p>
-                    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                        <button class="bg-white text-primary px-10 py-5 rounded-2xl font-bold text-xl hover:scale-105 transition-transform" aria-label="Agendar demostración gratuita">Agendar Demo Gratis</button>
-                        <button class="border-2 border-white/30 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white/10 transition-colors">Contactar Ventas</button>
-                    </div>
-                </div>
-                <!-- Abstract backgrounds -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-3xl -translate-y-1/2 translate-x-1/2 rounded-full" aria-hidden="true"></div>
-                <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/20 blur-3xl translate-y-1/2 -translate-x-1/2 rounded-full" aria-hidden="true"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 pt-20 pb-10 text-slate-400" role="contentinfo">
+    <!-- Módulos Grid (The exactly 9 modules) -->
+    <section id="modulos" class="py-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-12 mb-20">
-                <div class="col-span-1 md:col-span-1">
-                    <div class="flex items-center space-x-2 text-white mb-6">
-                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold">h</div>
-                        <span class="text-xl font-extrabold">HGI</span>
+            <div class="text-center mb-24 reveal-on-scroll">
+                <h2 class="text-5xl font-black mb-6">Módulos Especializados</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-lg font-medium">Potencia cada área de su empresa con herramientas dedicadas y totalmente integradas.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 1. Presupuestos -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     </div>
-                    <p class="text-sm leading-relaxed">Plataforma de gestión líder para el mercado constructor en Chile, con más de 15 años de evolución constante.</p>
+                    <h3 class="text-2xl font-black mb-4">Presupuestos</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control detallado de costos, APU y comparativas de presupuestos por obra.</p>
+                </article>
+                <!-- 2. Órdenes de Compra -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Órdenes de Compra</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Flujos de aprobación digital y gestión de suministros centralizada.</p>
+                </article>
+                <!-- 3. Subcontratos -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Subcontratos</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Gestión de contratos, pólizas y cumplimiento de normativas.</p>
+                </article>
+                <!-- 4. Estados de Pago -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Estados de Pago</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control de avance físico y valorizado de cada partida en terreno.</p>
+                </article>
+                <!-- 5. Ventas -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Ventas</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Gestión de facturación, promesas y escrituración de proyectos.</p>
+                </article>
+                <!-- 6. Cobranzas -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Cobranzas</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Seguimiento de flujo de ingresos y estados de deuda de clientes.</p>
+                </article>
+                <!-- 7. Bodega -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Bodega</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control de existencias, mermas y traslados por centro de costo.</p>
+                </article>
+                <!-- 8. Cuenta Corriente -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Cuenta Corriente</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Visión unificada de estados financieros con proveedores y subcontratistas.</p>
+                </article>
+                <!-- 9. Reportes -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Reportes</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Inteligencia de negocios y dashboards interactivos en tiempo real.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Control de Gestión -->
+    <section id="control" class="py-32 bg-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal-on-scroll">
+                    <h2 class="text-5xl font-black mb-8">Control de Gestión</h2>
+                    <p class="text-slate-400 text-lg mb-10">Tome decisiones basadas en datos concretos. HGI consolida toda la operación para una gestión gerencial eficiente y proactiva.</p>
+                    <button class="bg-primary text-white px-8 py-4 rounded-xl btn-liquid btn-magnetic font-black">Saber Más</button>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Exploración</h4>
-                    <nav class="flex flex-col space-y-4 text-sm" aria-label="Enlaces de exploración">
-                        <a href="#" class="hover:text-primary transition-colors">Inicio</a>
-                        <a href="#modulos" class="hover:text-primary transition-colors">Módulos</a>
-                        <a href="#beneficios" class="hover:text-primary transition-colors">Beneficios</a>
-                        <a href="#" class="hover:text-primary transition-colors">Precios</a>
-                    </nav>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Soporte</h4>
-                    <nav class="flex flex-col space-y-4 text-sm" aria-label="Enlaces de soporte">
-                        <a href="#" class="hover:text-primary transition-colors">Centro de Ayuda</a>
-                        <a href="#" class="hover:text-primary transition-colors">Documentación HGI</a>
-                        <a href="#" class="hover:text-primary transition-colors">Estado del Sistema</a>
-                        <a href="#" class="hover:text-primary transition-colors">Contacto</a>
-                    </nav>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Contacto</h4>
-                    <ul class="space-y-4 text-sm">
-                        <li class="flex items-center space-x-3">
-                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-                            <span>contacto@hgisistemas.cl</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                            <span>+56 2 2100 0000</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-                            <span>Santiago, Chile</span>
-                        </li>
-                    </ul>
+                <div class="reveal-on-scroll delay-200">
+                    <img src="https://lh3.googleusercontent.com/aida/AOfcidUsqvfimPpIvyaLMp8ot2TAIksmL1Jw8aPSI6IYc_RXI9wYH85_RrlJ1LAoJ4URTKDBU1-vxuHIeugWDZB0ZiEAiOPkj8C14MdV4qc38R0R-6_gRywWvIhDM-vExdIi4G_IQ_MaQVMovyrO_KcJjo_aX_tSW4GH4kWBYnqxYnmxOSf_crmVJpnGJ5XgNHGXg2fcQCSVIlr7KWSxk930tn2PawD5SMTMffqFkODlSNdlkNpkp4AfxcTf3lw" alt="Control BI" class="rounded-3xl shadow-2xl opacity-80">
                 </div>
             </div>
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-                <p>&copy; 2024 HGI Sistemas. Todos los derechos reservados.</p>
-                <div class="flex space-x-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white transition-colors">Políticas de Privacidad</a>
-                    <a href="#" class="hover:text-white transition-colors">Términos de Servicio</a>
+        </div>
+    </section>
+
+    <!-- Implementación -->
+    <section id="implementacion" class="py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-on-scroll mb-20">
+                <h2 class="text-5xl font-black mb-6">Implementación</h2>
+                <p class="text-slate-500 max-w-xl mx-auto font-medium">Acompañamiento experto en cada etapa de la transición digital.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-100">
+                    <div class="text-4xl font-black text-primary mb-4">01</div>
+                    <h4 class="text-xl font-bold mb-2">Diagnóstico</h4>
+                    <p class="text-slate-500 text-sm">Levantamiento de procesos y personalización inicial.</p>
                 </div>
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-200">
+                    <div class="text-4xl font-black text-primary mb-4">02</div>
+                    <h4 class="text-xl font-bold mb-2">Capacitación</h4>
+                    <p class="text-slate-500 text-sm">Formación práctica para todos los roles de la empresa.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-300">
+                    <div class="text-4xl font-black text-primary mb-4">03</div>
+                    <h4 class="text-xl font-bold mb-2">Soporte</h4>
+                    <p class="text-slate-500 text-sm">Asistencia continua y proactiva post-lanzamiento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Empresa -->
+    <footer id="empresa" class="bg-slate-900 pt-32 pb-12 text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-2">
+                    <div class="flex items-center space-x-3 text-white mb-8 font-black text-3xl">HGI</div>
+                    <p class="max-w-sm leading-relaxed">Impulsando la eficiencia de la industria constructora con tecnología de vanguardia y experiencia real en obra por más de 15 años.</p>
+                </div>
+                <div>
+                    <h5 class="text-white font-black uppercase text-xs tracking-widest mb-8">Navegación</h5>
+                    <nav class="flex flex-col space-y-4 text-sm font-bold">
+                        <a href="#plataforma" class="hover:text-primary transition-colors">Plataforma</a>
+                        <a href="#modulos" class="hover:text-primary transition-colors">Módulos</a>
+                        <a href="#control" class="hover:text-primary transition-colors">Gestión</a>
+                        <a href="#implementacion" class="hover:text-primary transition-colors">Implementación</a>
+                    </nav>
+                </div>
+                <div>
+                    <h5 class="text-white font-black uppercase text-xs tracking-widest mb-8">Contacto</h5>
+                    <p class="text-sm font-bold mb-4">contacto@hgisistemas.cl</p>
+                    <p class="text-sm font-bold">Santiago, Chile</p>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex justify-between items-center text-xs font-bold uppercase tracking-widest">
+                <p>&copy; 2024 HGI Sistemas. Todos los derechos reservados.</p>
+                <a href="#" class="text-white hover:text-primary">LinkedIn</a>
             </div>
         </div>
     </footer>
 
     <script>
-        // Intersection Observer for Reveal Animations
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -450,36 +346,21 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-
-            // Initial Hero Reveal
-            setTimeout(() => {
-                document.querySelector('header .reveal-on-scroll')?.classList.add('active');
-            }, 100);
+            setTimeout(() => document.querySelector('header .reveal-on-scroll')?.classList.add('active'), 100);
         });
 
-        // Magnetic Button Effect
         document.querySelectorAll('.btn-magnetic').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.3}px)`;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.2}px)`;
             });
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'translate(0px, 0px)';
-            });
-        });
-
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        menuBtn?.addEventListener('click', () => {
-            const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
-            menuBtn.setAttribute('aria-expanded', !expanded);
-            alert('Menú móvil en desarrollo - HGI Responsive');
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0px, 0px)');
         });
     </script>
 </body>
