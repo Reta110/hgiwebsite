@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HGI - Plataforma de Gestión Integral para Constructoras</title>
+    <meta name="description" content="Control real de presupuestos, contratos y finanzas para constructoras en una sola plataforma robusta y escalable.">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2e70ff',
+                        'primary-dark': '#1a56db',
+                        surface: '#f8fafc',
+                        dark: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'reveal': 'reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'mesh': 'mesh 20s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        reveal: {
+                            '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                        },
+                        mesh: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary: #2e70ff;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+
+        .mesh-gradient {
+            background: linear-gradient(-45deg, #f8fafc, #e2e8f0, #dbeafe, #eff6ff);
+            background-size: 400% 400%;
+            animation: mesh 15s ease infinite;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            opacity: 0.03; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-liquid {
+            position: relative; overflow: hidden; z-index: 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-liquid::after {
+            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2); z-index: -1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-liquid:hover::after { top: 0; }
+
+        .reveal-on-scroll {
+            opacity: 0; transform: translateY(30px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-on-scroll.active { opacity: 1; transform: translateY(0) scale(1); }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        .mockup-shadow { filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1)); }
+    </style>
+</head>
+<body class="bg-surface text-dark selection:bg-primary/20">
+
+    <div class="mesh-gradient" aria-hidden="true"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass" role="navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">h</div>
+                    <span class="text-2xl font-black text-dark tracking-tighter">HGI</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-bold text-slate-700 uppercase tracking-wider">
+                    <a href="#plataforma" class="hover:text-primary transition-colors">Plataforma</a>
+                    <a href="#modulos" class="hover:text-primary transition-colors">Módulos</a>
+                    <a href="#control" class="hover:text-primary transition-colors">Gestión</a>
+                    <a href="#implementacion" class="hover:text-primary transition-colors">Implementación</a>
+                    <a href="#empresa" class="hover:text-primary transition-colors">Empresa</a>
+                    <button class="bg-primary text-white px-6 py-2.5 rounded-full btn-liquid btn-magnetic font-bold shadow-lg shadow-primary/20">Solicitar Demo</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="relative pt-48 pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-on-scroll">
+                    <span class="inline-block px-4 py-1 mb-6 text-xs font-black text-primary bg-primary/10 rounded-full uppercase tracking-widest">HGI Ecosistema Digital</span>
+                    <h1 class="text-6xl lg:text-8xl font-black leading-none mb-8">
+                        Control <span class="text-primary">Absoluto</span>
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-12 leading-relaxed max-w-lg">
+                        La plataforma de gestión integral diseñada para la realidad de las constructoras modernas. Integración técnica y financiera sin fisuras.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-primary text-white px-10 py-5 rounded-2xl btn-liquid btn-magnetic font-black text-lg shadow-2xl shadow-primary/30">Agendar Demo</button>
+                        <button class="border-2 border-slate-200 glass text-dark px-10 py-5 rounded-2xl btn-magnetic font-black text-lg">Explorar Módulos</button>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll delay-200">
+                    <div class="animate-float">
+                        <img src="https://lh3.googleusercontent.com/aida/AOfcidUOpSCGqPbPY9eZvnQhVIpBQz-5APprVfTnDmMPDYWR5IfC2beMNnv-cc9RVW3YL8GLpVpeY1avP-8l60Q-yuYsBg2p7SWl6ZKhojvDvvil0XfbtmDsG_GCc3U-pXyLUG2BA7uA6OVsODv99DVCobXl-0lYfCG1B6QjHKLIsS-EjEZGq1q4h_Jf7jZFzcA3qwR9Azq8LMTeA8dLfIvsjCp9qyO27pnG5fUCNohVlg603EKUtXQtZ21l5q2x" alt="Dashboard HGI" class="mockup-shadow rounded-[2.5rem] border-4 border-white/50">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Plataforma Section -->
+    <section id="plataforma" class="py-32 bg-white/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="reveal-on-scroll">
+                    <h2 class="text-4xl lg:text-5xl font-black mb-8 leading-tight">Plataforma HGI</h2>
+                    <p class="text-lg text-slate-600 mb-10">Un núcleo centralizado que conecta cada departamento de su constructora. Información veraz, en tiempo real, accesible desde cualquier lugar.</p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass p-6 rounded-3xl">
+                            <div class="text-3xl font-black text-primary mb-2">100%</div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Nativo en la Nube</p>
+                        </div>
+                        <div class="glass p-6 rounded-3xl">
+                            <div class="text-3xl font-black text-primary mb-2">360°</div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Visión de Obra</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll delay-200">
+                    <img src="https://lh3.googleusercontent.com/aida/AOfcidUHpnJZs_wyczhs0_HEMMgZo14hBO3jqJ7QPsvwMmItAFFslZ_nJ9j4uhRQL6nWWLH0ybuuZtN6j8VNd9QdG361b_Gxj8TZ-2iR0HcHi95JP15nLoPacd8etibIS6Mdjmkk0_gDSTna1leSBAF1cwAfBTTcQvyKxd9BBMvUNftS0gVgqfoh_AxgUuFtT0dkdc3pRWo6P5Idvi-xmD3-N9toIWBAm0jCkhWD0Wl9HBkCTYETFBssYBSmk70W" alt="HGI UI" class="rounded-3xl shadow-2xl border-2 border-white">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Módulos Grid (The exactly 9 modules) -->
+    <section id="modulos" class="py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-24 reveal-on-scroll">
+                <h2 class="text-5xl font-black mb-6">Módulos Especializados</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-lg font-medium">Potencia cada área de su empresa con herramientas dedicadas y totalmente integradas.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 1. Presupuestos -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Presupuestos</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control detallado de costos, APU y comparativas de presupuestos por obra.</p>
+                </article>
+                <!-- 2. Órdenes de Compra -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Órdenes de Compra</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Flujos de aprobación digital y gestión de suministros centralizada.</p>
+                </article>
+                <!-- 3. Subcontratos -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-cyan-100 rounded-2xl flex items-center justify-center text-cyan-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Subcontratos</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Gestión de contratos, pólizas y cumplimiento de normativas.</p>
+                </article>
+                <!-- 4. Estados de Pago -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Estados de Pago</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control de avance físico y valorizado de cada partida en terreno.</p>
+                </article>
+                <!-- 5. Ventas -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Ventas</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Gestión de facturación, promesas y escrituración de proyectos.</p>
+                </article>
+                <!-- 6. Cobranzas -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Cobranzas</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Seguimiento de flujo de ingresos y estados de deuda de clientes.</p>
+                </article>
+                <!-- 7. Bodega -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-100 group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Bodega</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Control de existencias, mermas y traslados por centro de costo.</p>
+                </article>
+                <!-- 8. Cuenta Corriente -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-200 group">
+                    <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Cuenta Corriente</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Visión unificada de estados financieros con proveedores y subcontratistas.</p>
+                </article>
+                <!-- 9. Reportes -->
+                <article class="glass p-10 rounded-[3rem] hover:shadow-2xl transition-all reveal-on-scroll delay-300 group">
+                    <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-600 mb-8 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4">Reportes</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">Inteligencia de negocios y dashboards interactivos en tiempo real.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Control de Gestión -->
+    <section id="control" class="py-32 bg-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal-on-scroll">
+                    <h2 class="text-5xl font-black mb-8">Control de Gestión</h2>
+                    <p class="text-slate-400 text-lg mb-10">Tome decisiones basadas en datos concretos. HGI consolida toda la operación para una gestión gerencial eficiente y proactiva.</p>
+                    <button class="bg-primary text-white px-8 py-4 rounded-xl btn-liquid btn-magnetic font-black">Saber Más</button>
+                </div>
+                <div class="reveal-on-scroll delay-200">
+                    <img src="https://lh3.googleusercontent.com/aida/AOfcidUsqvfimPpIvyaLMp8ot2TAIksmL1Jw8aPSI6IYc_RXI9wYH85_RrlJ1LAoJ4URTKDBU1-vxuHIeugWDZB0ZiEAiOPkj8C14MdV4qc38R0R-6_gRywWvIhDM-vExdIi4G_IQ_MaQVMovyrO_KcJjo_aX_tSW4GH4kWBYnqxYnmxOSf_crmVJpnGJ5XgNHGXg2fcQCSVIlr7KWSxk930tn2PawD5SMTMffqFkODlSNdlkNpkp4AfxcTf3lw" alt="Control BI" class="rounded-3xl shadow-2xl opacity-80">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementación -->
+    <section id="implementacion" class="py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-on-scroll mb-20">
+                <h2 class="text-5xl font-black mb-6">Implementación</h2>
+                <p class="text-slate-500 max-w-xl mx-auto font-medium">Acompañamiento experto en cada etapa de la transición digital.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-100">
+                    <div class="text-4xl font-black text-primary mb-4">01</div>
+                    <h4 class="text-xl font-bold mb-2">Diagnóstico</h4>
+                    <p class="text-slate-500 text-sm">Levantamiento de procesos y personalización inicial.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-200">
+                    <div class="text-4xl font-black text-primary mb-4">02</div>
+                    <h4 class="text-xl font-bold mb-2">Capacitación</h4>
+                    <p class="text-slate-500 text-sm">Formación práctica para todos los roles de la empresa.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl reveal-on-scroll delay-300">
+                    <div class="text-4xl font-black text-primary mb-4">03</div>
+                    <h4 class="text-xl font-bold mb-2">Soporte</h4>
+                    <p class="text-slate-500 text-sm">Asistencia continua y proactiva post-lanzamiento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Empresa -->
+    <footer id="empresa" class="bg-slate-900 pt-32 pb-12 text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-2">
+                    <div class="flex items-center space-x-3 text-white mb-8 font-black text-3xl">HGI</div>
+                    <p class="max-w-sm leading-relaxed">Impulsando la eficiencia de la industria constructora con tecnología de vanguardia y experiencia real en obra por más de 15 años.</p>
+                </div>
+                <div>
+                    <h5 class="text-white font-black uppercase text-xs tracking-widest mb-8">Navegación</h5>
+                    <nav class="flex flex-col space-y-4 text-sm font-bold">
+                        <a href="#plataforma" class="hover:text-primary transition-colors">Plataforma</a>
+                        <a href="#modulos" class="hover:text-primary transition-colors">Módulos</a>
+                        <a href="#control" class="hover:text-primary transition-colors">Gestión</a>
+                        <a href="#implementacion" class="hover:text-primary transition-colors">Implementación</a>
+                    </nav>
+                </div>
+                <div>
+                    <h5 class="text-white font-black uppercase text-xs tracking-widest mb-8">Contacto</h5>
+                    <p class="text-sm font-bold mb-4">contacto@hgisistemas.cl</p>
+                    <p class="text-sm font-bold">Santiago, Chile</p>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex justify-between items-center text-xs font-bold uppercase tracking-widest">
+                <p>&copy; 2024 HGI Sistemas. Todos los derechos reservados.</p>
+                <a href="#" class="text-white hover:text-primary">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            setTimeout(() => document.querySelector('header .reveal-on-scroll')?.classList.add('active'), 100);
+        });
+
+        document.querySelectorAll('.btn-magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0px, 0px)');
+        });
+    </script>
+</body>
+</html>
